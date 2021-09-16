@@ -38,11 +38,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
       },
       reservedFrom: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: true,
       },
       reservedTo: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: true,
       },
     },

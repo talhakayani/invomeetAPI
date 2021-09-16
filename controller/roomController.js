@@ -28,7 +28,9 @@ exports.getAvailableRooms = async (req, res, _next) => {
     if (!rooms.length) throw new Error('No room available');
     return res.status(200).json({ status: 200, message: 'Rooms found', rooms });
   } catch (err) {
-    return res.status(400).json({ status: 400, message: err.message });
+    return res
+      .status(400)
+      .json({ status: 400, message: err.message, rooms: [] });
   }
 };
 
@@ -38,7 +40,9 @@ exports.getAllRooms = async (req, res, _next) => {
     if (!rooms.length) throw new Error('No rooms found');
     return res.status(200).json({ status: 200, message: 'Rooms found', rooms });
   } catch (err) {
-    return res.status(400).json({ status: 400, message: err.message });
+    return res
+      .status(400)
+      .json({ status: 400, message: err.message, rooms: [] });
   }
 };
 
@@ -54,7 +58,9 @@ exports.getRoomsByFloor = async (req, res, _next) => {
     if (!rooms.length) throw new Error('No meeting room found on this floor');
     return res.status(200).json({ status: 200, message: 'Rooms found', rooms });
   } catch (err) {
-    return res.status(400).json({ status: 400, message: err.message });
+    return res
+      .status(400)
+      .json({ status: 400, message: err.message, rooms: [] });
   }
 };
 
@@ -92,14 +98,21 @@ exports.getRoomByName = async (req, res, _next) => {
 
 exports.updateRoomStatus = async (req, res, _next) => {
   try {
-    const status = req.body.status;
+    const name = req.params.name;
+    const { status, reservedBy, reservedWith, reservedFrom } = req.body;
     if (!status) throw new Error('Please attach the body');
-    const result = await Room.update({
-      status: status,
-    });
+    const result = await Room.update(
+      { status, reservedBy, reservedWith, reservedFrom },
+      {
+        where: {
+          name: name,
+        },
+      }
+    );
+    console.log(result);
     if (!result) throw new Error('Unable to update the record');
-    return res.status(200).json({ status: 400, message: 'data updated' });
+    return res.status(200).json({ status: 200, message: 'data updated' });
   } catch (err) {
-    return err.status(400).json({ status: 400, message: err.message });
+    return res.status(400).json({ status: 400, message: err.message });
   }
 };

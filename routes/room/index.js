@@ -6,4 +6,5 @@ router.get('/available', controller.getAvailableRooms);
 router.get('/find/id/:id', controller.getRoomById);
 router.get('/find/location/:floor', controller.getRoomsByFloor);
 router.get('/find/name/:name', controller.getRoomByName);
+router.put('/update/status/:name', controller.updateRoomStatus);
 module.exports = router;
