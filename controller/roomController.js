@@ -25,8 +25,10 @@ exports.getAvailableRooms = async (req, res, _next) => {
       },
     };
     const rooms = await Room.findAll(query);
-    if (!rooms.length) throw new Error('No room available');
-    return res.status(200).json({ status: 200, message: 'Rooms found', rooms });
+    let message = 'Rooms Found!';
+    //console.log(rooms);
+    if (!rooms.length) message = 'No room available';
+    return res.status(200).json({ status: 200, message, rooms });
   } catch (err) {
     return res
       .status(400)
@@ -37,8 +39,9 @@ exports.getAvailableRooms = async (req, res, _next) => {
 exports.getAllRooms = async (req, res, _next) => {
   try {
     const rooms = await Room.findAll();
-    if (!rooms.length) throw new Error('No rooms found');
-    return res.status(200).json({ status: 200, message: 'Rooms found', rooms });
+    let message = 'Rooms Found!';
+    if (!rooms.length) message = 'No room found';
+    return res.status(200).json({ status: 200, message, rooms });
   } catch (err) {
     return res
       .status(400)
@@ -55,8 +58,9 @@ exports.getRoomsByFloor = async (req, res, _next) => {
         location: floor,
       },
     });
-    if (!rooms.length) throw new Error('No meeting room found on this floor');
-    return res.status(200).json({ status: 200, message: 'Rooms found', rooms });
+    let message = 'Rooms found';
+    if (!rooms.length) message = 'No meeting room found on this floor';
+    return res.status(200).json({ status: 200, message, rooms });
   } catch (err) {
     return res
       .status(400)
@@ -73,8 +77,9 @@ exports.getRoomById = async (req, res, _next) => {
         id: id,
       },
     });
-    if (!room) throw new Error('No room found');
-    return res.status(200).json({ status: 200, message: 'Room found', room });
+    let message = 'Room found';
+    if (!room) message = 'No room found';
+    return res.status(200).json({ status: 200, message, room });
   } catch (err) {
     return res.status(400).json({ status: 400, message: err.message });
   }
@@ -89,8 +94,9 @@ exports.getRoomByName = async (req, res, _next) => {
         name: name,
       },
     });
-    if (!room) throw new Error('No room found');
-    return res.status(200).json({ status: 200, message: 'Room found', room });
+    let message = 'Room found';
+    if (!room) message = 'No room found';
+    return res.status(200).json({ status: 200, message, room });
   } catch (err) {
     return res.status(400).json({ status: 400, message: err.message });
   }
@@ -100,7 +106,7 @@ exports.updateRoomStatus = async (req, res, _next) => {
   try {
     const name = req.params.name;
     const { status, reservedBy, reservedWith, reservedFrom } = req.body;
-    if (!status) throw new Error('Please attach the body');
+    if (status == 0) throw new Error('Please attach the body');
     const result = await Room.update(
       { status, reservedBy, reservedWith, reservedFrom },
       {
@@ -109,7 +115,6 @@ exports.updateRoomStatus = async (req, res, _next) => {
         },
       }
     );
-    console.log(result);
     if (!result) throw new Error('Unable to update the record');
     return res.status(200).json({ status: 200, message: 'data updated' });
   } catch (err) {
