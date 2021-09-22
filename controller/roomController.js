@@ -121,3 +121,53 @@ exports.updateRoomStatus = async (req, res, _next) => {
     return res.status(400).json({ status: 400, message: err.message });
   }
 };
+
+exports.getMeetingsByReserver = async (req, res, _next) => {
+  try {
+    const { reservedBy } = req.params;
+    if (!reservedBy) throw new Error('Please provide the params in the path');
+    const query = {
+      where: {
+        reservedBy: reservedBy,
+      },
+    };
+    const meetings = await Room.findAll(query);
+    if (!meetings.length)
+      return res
+        .status(200)
+        .json({ status: 200, message: 'No meeting found', meetings });
+    return res
+      .status(200)
+      .json({ status: 200, message: 'Meetings found', meetings });
+  } catch (err) {
+    return res.status(300).json({ status: 300, message: err.message });
+  }
+};
+
+exports.isRoomAvailabe = async (req, res, _next) => {
+  try {
+    const { room } = req.params;
+    if (!room) throw new Error('Please provide the Room name in Path');
+    const roomDetails = await Room.findOne({
+      where: {
+        name: room,
+      },
+    });
+    if (!roomDetails) throw new Error('Something went wrong here');
+    const data = roomDetails.dataValues;
+    if (data.status === 'available')
+      return res
+        .status(200)
+        .json({ status: 200, message: 'Room is available', isAvailable: true });
+    return res.status(200).json({
+      status: 200,
+      message: `Room is busy`,
+      reservedBy: roomDetails.reservedBy,
+      reservedFrom: roomDetails.reservedFrom,
+      reservedWith: roomDetails.reservedWith,
+      isAvailable: false,
+    });
+  } catch (err) {
+    return res.status(300).json({ status: 300, message: err.message });
+  }
+};
