@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class GoogleCalendarConfig extends Model {
+  class CalendarConfig extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,28 +11,29 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  GoogleCalendarConfig.init(
+  CalendarConfig.init(
     {
-      user_id: {
+      userId: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
       },
       token: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(10000),
         allowNull: false,
         unique: true,
       },
       calendarId: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: 'Primary',
       },
     },
     {
       sequelize,
-      tableName: 'googleCalendarConfigs',
-      modelName: 'GoogleCalendarConfig',
+      tableName: 'calendar_configs',
+      modelName: 'CalendarConfig',
     }
   );
-  return GoogleCalendarConfig;
+  return CalendarConfig;
 };

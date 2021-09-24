@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Room.hasMany(models.Meeting, {
+        as: 'meetings',
+        foreignKey: 'roomId',
+      });
     }
   }
   Room.init(
@@ -16,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
       },
       location: {
         type: DataTypes.STRING,
@@ -24,26 +29,6 @@ module.exports = (sequelize, DataTypes) => {
       capacity: {
         type: DataTypes.INTEGER,
         allowNull: false,
-      },
-      status: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      reservedBy: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      reservedWith: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      reservedFrom: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      reservedTo: {
-        type: DataTypes.STRING,
-        allowNull: true,
       },
     },
     {

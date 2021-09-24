@@ -1,4 +1,7 @@
 'use strict';
+
+//const { DataTypes } = require('sequelize/types');
+
 module.exports = {
   up: async (queryInterface, DataTypes) => {
     await queryInterface.createTable('rooms', {
@@ -11,7 +14,7 @@ module.exports = {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        primaryKey: true,
+        unique: true,
       },
       location: {
         type: DataTypes.STRING,
@@ -20,26 +23,6 @@ module.exports = {
       capacity: {
         type: DataTypes.INTEGER,
         allowNull: false,
-      },
-      status: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      reservedBy: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      reservedWith: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      reservedFrom: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      reservedTo: {
-        type: DataTypes.STRING,
-        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -51,7 +34,7 @@ module.exports = {
       },
     });
   },
-  down: async (queryInterface, DataTypes) => {
+  down: async queryInterface => {
     await queryInterface.dropTable('rooms');
   },
 };

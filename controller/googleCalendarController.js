@@ -1,10 +1,10 @@
-const { GoogleCalendarConfig } = require('../models');
+const { CalendarConfig } = require('../models');
 
 exports.addToken = async (req, res, _next) => {
   try {
     const { body } = req;
     if (!body) throw new Error('Please attach the body with this');
-    const result = await GoogleCalendarConfig.create(body);
+    const result = await CalendarConfig.create(body);
     if (!result) throw new Error('Something went wrong');
     return res.status(200).json({
       status: 200,
@@ -22,9 +22,9 @@ exports.getToken = async (req, res, _next) => {
   try {
     const { user_id } = req.params;
     if (!user_id) throw new Error('Please provide the user id');
-    const result = await GoogleCalendarConfig.findOne({
+    const result = await CalendarConfig.findOne({
       where: {
-        user_id: user_id,
+        userId: user_id,
       },
     });
     if (!result)
@@ -44,7 +44,7 @@ exports.getToken = async (req, res, _next) => {
 
 exports.getAllTokens = async (req, res, _next) => {
   try {
-    const tokens = await GoogleCalendarConfig.findAll();
+    const tokens = await CalendarConfig.findAll();
     if (!tokens.length)
       return res
         .status(200)
@@ -62,9 +62,9 @@ exports.addCalendar = async (req, res, _next) => {
     const { user_id } = params;
     if (!body) throw new Error('Please attach the body with this');
     if (!user_id) throw new Error('Please provide the calendar Id');
-    const result = await GoogleCalendarConfig.update(body, {
+    const result = await CalendarConfig.update(body, {
       where: {
-        user_id: user_id,
+        userId: user_id,
       },
     });
 
@@ -85,9 +85,9 @@ exports.getCalendarId = async (req, res, _next) => {
   try {
     const { user_id } = req.params;
     if (!user_id) throw new Error('Please attach the path params');
-    const calendarId = await GoogleCalendarConfig.findOne({
+    const calendarId = await CalendarConfig.findOne({
       where: {
-        user_id: user_id,
+        userId: user_id,
       },
     });
 
