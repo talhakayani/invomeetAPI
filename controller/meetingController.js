@@ -7,9 +7,13 @@ exports.addMeeting = async (req, res, _next) => {
       throw new Error('Please attach the body');
     }
     const result = await Meeting.create(body);
-    return res.status(200).json({ status: 200, message: 'Meeting created' });
+    return res
+      .status(200)
+      .json({ status: 200, message: 'Meeting created', meeting: result });
   } catch (err) {
-    return res.status(400).json({ status: 400, message: err.message });
+    return res
+      .status(400)
+      .json({ status: 400, message: err.message, meeting: null });
   }
 };
 exports.getMeetings = async (req, res, _next) => {

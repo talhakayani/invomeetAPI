@@ -28,6 +28,11 @@ module.exports = {
         type: DataTypes.STRING,
         defaultValue: 'InProgress',
       },
+      googleCalendarEventId: {
+        type: DataTypes.STRING(500),
+        allowNull: false,
+        unique: true,
+      },
       roomId: {
         type: DataTypes.INTEGER,
         allowNull: false,

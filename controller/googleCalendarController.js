@@ -21,6 +21,7 @@ exports.addToken = async (req, res, _next) => {
 exports.getToken = async (req, res, _next) => {
   try {
     const { user_id } = req.params;
+    console.log(user_id);
     if (!user_id) throw new Error('Please provide the user id');
     const result = await CalendarConfig.findOne({
       where: {

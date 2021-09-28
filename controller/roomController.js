@@ -52,6 +52,9 @@ exports.getAllRoomsAndMeetings = async (req, res, _next) => {
       include: {
         model: Meeting,
         as: 'meetings',
+        where: {
+          inProgress: 'InProgress',
+        },
       },
     });
     let message = 'Rooms Found!';
@@ -107,6 +110,68 @@ exports.getMeetingsByUser = async (req, res, _next) => {
     return res
       .status(400)
       .json({ status: 400, message: err.message, rooms: [] });
+  }
+};
+
+exports.getInProgressMeetingsByUser = async (req, res, _next) => {
+  try {
+    const { reservedBy } = req.params;
+    if (!reservedBy) throw new Error('Please attach the name as path params ');
+    const rooms = await Room.findAll({
+      include: {
+        model: Meeting,
+        as: 'meetings',
+        where: {
+          reservedBy: reservedBy,
+          inProgress: 'InProgress',
+        },
+      },
+    });
+    let message = 'Rooms Found!';
+    if (!rooms.length) message = 'No room found';
+    return res.status(200).json({ status: 200, message, rooms });
+  } catch (err) {
+    return res
+      .status(400)
+      .json({ status: 400, message: err.message, rooms: [] });
+  }
+};
+
+exports.getRoomId = async (req, res, _next) => {
+  try {
+    const { name } = req.params;
+    if (!name) throw new Error('Please attach the name of the room');
+    const rooms = await Room.findOne({
+      where: {
+        name: name,
+      },
+    });
+    let message = 'Room Found!';
+    if (!rooms) message = 'No room found';
+    return res.status(200).json({ status: 200, message, rooms });
+  } catch (err) {
+    return res
+      .status(400)
+      .json({ status: 400, message: err.message, rooms: [] });
+  }
+};
+
+exports.getRoomInfo = async (req, res, _next) => {
+  try {
+    const { name } = req.params;
+    if (!name) throw new Error('Please provide the name of the room');
+    const rooms = await Room.findOne({
+      where: {
+        name: name,
+      },
+    });
+    let message = 'Rooms Found!';
+    if (!rooms) message = 'No room found';
+    return res.status(200).json({ status: 200, message, rooms });
+  } catch (err) {
+    return res
+      .status(400)
+      .json({ status: 400, message: err.message, rooms: {} });
   }
 };
 

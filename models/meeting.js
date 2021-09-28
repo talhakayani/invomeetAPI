@@ -1,6 +1,5 @@
 'use strict';
 const { Model } = require('sequelize');
-const { Room } = require('../models');
 module.exports = (sequelize, DataTypes) => {
   class Meeting extends Model {
     /**
@@ -32,8 +31,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           async reserveMeetingDate() {
-            const sameDate = false,
-              differentRoom = false;
             const enteredReservedFromDate = new Date(this.reservedFrom);
             const enteredReservedToDate = new Date(this.reservedTo);
             const enteredRoomId = this.roomId;
@@ -52,40 +49,23 @@ module.exports = (sequelize, DataTypes) => {
                 enteredReservedToDate > meeting[i].reservedFrom &&
                 enteredReservedToDate <= meeting[i].reservedTo
               ) {
-                throw new Error({
-                  error: 'custom',
-                  message:
-                    'Your meeting time have conflict with other meeting time, we suggest you to please change the meeting time',
-                });
+                throw new Error(
+                  'Your meeting time have conflict with other meeting time, we suggest you to please change the meeting time'
+                );
               }
               if (
                 enteredReservedFromDate >= meeting[i].reservedFrom &&
                 enteredReservedFromDate <= meeting[i].reservedTo
               ) {
                 if (meeting.roomId != this.roomId) {
-                  throw new Error({
-                    error: 'custom',
-                    message:
-                      'You can not reserve the meeting when you already have meeting reserved at the same time in other room',
-                  });
+                  throw new Error(
+                    'You can not reserve the meeting when you already have meeting reserved at the same time in other room'
+                  );
                 }
-                throw new Error({
-                  error: 'custom',
-                  message:
-                    'You can not reserve the meeting in this room at this time, because there is another meeting reserved at this time',
-                });
+                throw new Error(
+                  'You can not reserve the meeting in this room at this time, because there is another meeting reserved at this time'
+                );
               }
-              // if (meeting.length != 0 && meeting[0].roomId != this.roomId) {
-              //   throw new Error(
-              //     'User can attend or reserve one meeting at a time, please choose different time for meeting'
-              //   );
-              // }
-              // if (
-              //   meeting.length != 0 &&
-              //   meeting[0].inProgress == 'InProgress'
-              // ) {
-              //   throw new Error('Meeting already exsits');
-              // }
             }
           },
         },
@@ -97,6 +77,11 @@ module.exports = (sequelize, DataTypes) => {
       inProgress: {
         type: DataTypes.STRING,
         defaultValue: 'InProgress',
+      },
+      googleCalendarEventId: {
+        type: DataTypes.STRING(500),
+        allowNull: false,
+        unique: true,
       },
     },
     {
