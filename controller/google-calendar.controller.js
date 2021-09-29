@@ -1,4 +1,5 @@
 const { CalendarConfig } = require('../models');
+// rename the files as required. 
 
 exports.addToken = async (req, res, _next) => {
   try {
@@ -57,6 +58,7 @@ exports.getAllTokens = async (req, res, _next) => {
     return res.status(400).json({ status: 400, message: err.message });
   }
 };
+
 exports.addCalendar = async (req, res, _next) => {
   try {
     const { params, body } = req;

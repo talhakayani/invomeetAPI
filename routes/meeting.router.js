@@ -1,4 +1,4 @@
-const controller = require('../../controller/meetingController');
+const controller = require('../controller/meetingController');
 const router = require('express').Router();
 
 router.get('/', controller.getMeetings);

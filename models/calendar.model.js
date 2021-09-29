@@ -1,6 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
+  // Please add the create, update, delete hooks. Simply console.log the data for now. 
   class CalendarConfig extends Model {
     /**
      * Helper method for defining associations.

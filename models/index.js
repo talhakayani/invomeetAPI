@@ -31,6 +31,8 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+// add files manually or add an array that will allow disabling a certain module. 
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
